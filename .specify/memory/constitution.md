@@ -1,50 +1,86 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+# SDD_Calculator_Toolbox.WinUI Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### 1. UI 邏輯規範
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+- UI 層必須使用 C# 語言，並基於 WinUI 3 框架實作。
+- 所有 UI 元件與互動邏輯須遵循 WinUI 3 標準。
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### 2. 核心運算邏輯
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+- 所有核心運算必須以 C++ 實現，並與 UI 層分離。
+- 運算模組須獨立測試，確保正確性與效能。
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### 3. 設計模式
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+- 全專案必須嚴格遵循 MVVM 設計模式。
+- ViewModel 層負責狀態管理與業務邏輯，View 層僅負責顯示。
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+### 4. 跨語言互通性
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+- C# 與 C++ 之間必須透過 C++/WinRT 實現互通。
+- C++ 側所有供 C# 呼叫的公共介面與方法必須使用 PascalCase 命名。
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+### 5. C# 最佳實踐
+
+- 所有 C# 程式碼必須遵循官方最佳實踐。
+- 包含命名、結構、例外處理、資源管理等。
+
+### 6. 命名規範
+
+- 類別與方法名稱必須使用 PascalCase。
+- 局部變數名稱必須使用 camelCase。
+
+### 7. 靜態分析
+
+- 所有程式碼須通過 Roslyn/StyleCop 靜態分析。
+- 不得有 W 等級以上警告。
+
+### 8. 錯誤處理與日誌
+
+- 所有預期錯誤必須使用 try-catch 處理。
+- 錯誤必須記錄於 .log 檔案，內容包含錯誤訊息、堆疊追蹤、時間戳記，並保存於本地。
+
+### 9. 單元測試
+
+- 單元測試分支覆蓋率目標為 80%。
+- 測試必須自動化執行並定期檢查覆蓋率。
+
+### 10. 提交規範
+
+- 所有提交訊息必須遵循 Conventional Commits 規範。
+
+### 11. UI 標準
+
+- 應用程式必須支援淺色與深色模式。
+- UI 設計須符合 Fluent Design 標準。
+
+### 12. 國際化
+
+- 必須支援繁體中文、英文、韓文、日文。
+- 所有 UI 文字須使用資源檔案 (.resw) 管理。
+
+### 13. 文件規範
+
+- 所有 Markdown 文件（.md）必須通過 markdownlint 規範檢查，以確保文件結構清晰且可讀性高。
+
+## 其他規範
+
+### 開發流程
+
+- 所有開發流程須遵循上述原則。
+- 重大變更須經團隊審核與測試。
+
+### 安全性與效能
+
+- 所有程式碼須考量安全性與效能最佳化。
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+- 本憲章優先於其他開發規範。
+- 憲章修訂須經團隊討論、文件化並公告。
+- 所有 Pull Request 與 Code Review 必須驗證憲章合規性。
+- 憲章修訂需記錄版本、修訂日期與修訂內容。
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.0.0 | **Ratified**: 2025-12-09 | **Last Amended**: 2025-12-09
