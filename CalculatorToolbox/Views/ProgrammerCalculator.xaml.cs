@@ -12,17 +12,28 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.ApplicationModel.Resources;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
 namespace CalculatorToolbox
 {
-    public sealed partial class ScientificCalculator : UserControl
+    public sealed partial class ProgrammerCalculator : UserControl
     {
-        public ScientificCalculator()
+        private ResourceLoader _resourceLoader;
+
+        public ProgrammerCalculator()
         {
             InitializeComponent();
+            DataContext = new ViewModels.ProgrammerCalculatorViewModel();
+            _resourceLoader = ResourceLoader.GetForViewIndependentUse();
+            UpdateLocalization();
+        }
+
+        private void UpdateLocalization()
+        {
+            ProgrammerTitle.Text = _resourceLoader.GetString("Programmer");
         }
     }
 }

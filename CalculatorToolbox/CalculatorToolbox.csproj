@@ -12,7 +12,37 @@
     <WinUISDKReferences>false</WinUISDKReferences>
     <EnableMsixTooling>true</EnableMsixTooling>
     <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <CsWinRTEnabled>true</CsWinRTEnabled>
+    <CsWinRTComponent>true</CsWinRTComponent>
   </PropertyGroup>
+  
+  <!-- C++/WinRT 支援 -->
+  <ItemGroup>
+    <Midl Include="Services\Interop\CalculatorInterop.idl" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ClCompile Include="Services\NativeCalculator.cpp">
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="Services\Interop\CalculatorInterop.cpp">
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>..\pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="Services\pch.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ClInclude Include="Services\NativeCalculator.h" />
+    <ClInclude Include="Services\Interop\CalculatorInterop.h" />
+    <ClInclude Include="Services\pch.h" />
+  </ItemGroup>
+  
   <ItemGroup>
     <None Remove="ProgrammerCalculator.xaml" />
     <None Remove="ScientificCalculator.xaml" />

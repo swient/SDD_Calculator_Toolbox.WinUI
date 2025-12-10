@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="CalculatorToolbox.ScientificCalculator"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:CalculatorToolbox"
+    xmlns:models="using:CalculatorToolbox.Models"
+    xmlns:converters="using:CalculatorToolbox.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <Style x:Key="OperatorButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="{ThemeResource ControlFillColorSecondaryBrush}"/>
+            <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimaryBrush}"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalAlignment" Value="Stretch"/>
+            <Setter Property="Margin" Value="1"/>
+        </Style>
+        <Style x:Key="CalculatorButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="{ThemeResource ControlFillColorDefaultBrush}"/>
+            <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimaryBrush}"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalAlignment" Value="Stretch"/>
+            <Setter Property="Margin" Value="1"/>
+        </Style>
+        <Style x:Key="EqualsButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="{ThemeResource AccentFillColorDefaultBrush}"/>
+            <Setter Property="Foreground" Value="{ThemeResource TextOnAccentFillColorPrimaryBrush}"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalAlignment" Value="Stretch"/>
+            <Setter Property="Margin" Value="1"/>
+        </Style>
+        <Style x:Key="MemoryButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{ThemeResource TextFillColorSecondaryBrush}"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalAlignment" Value="Stretch"/>
+            <Setter Property="Margin" Value="1"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- 標題列 -->
+        <Grid Grid.Row="0" Margin="0,0,0,4">
+            <TextBlock x:Name="ScientificTitle" FontSize="20" HorizontalAlignment="Left" Margin="95,9,0,0"/>
+            <Button x:Name="HistoryButton"
+                    Content="&#xE81C;"
+                    FontFamily="Segoe MDL2 Assets"
+                    FontSize="16"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Margin="0,0,10,0"
+                    Width="40"
+                    Height="40"
+                    Command="{Binding ShowHistoryCommand}"/>
+        </Grid>
+
+        <!-- 表達式與主顯示框 -->
+        <StackPanel Grid.Row="1" Margin="2,0,2,0">
+            <TextBlock FontSize="20" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Margin="0,0,0,2" Padding="0,0,30,0" TextAlignment="Right"
+                       Foreground="#888" Text="{Binding ExpressionDisplay}"/>
+            <TextBlock FontSize="46" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="0,0,0,0" Padding="0,0,20,0"
+                       TextAlignment="Right" Text="{Binding MainDisplay}"/>
+        </StackPanel>
+
+        <!-- 狀態列 -->
+        <Grid Grid.Row="2" Margin="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <!-- 第一排：AngleModeText -->
+            <Button Grid.Row="0" Grid.Column="0" Style="{StaticResource MemoryButtonStyle}" Content="{Binding AngleModeText}" Command="{Binding ToggleModeCommand}"/>
+            <!-- 第二排：記憶體按鈕 -->
+            <Button Grid.Row="1" Grid.Column="0" Style="{StaticResource MemoryButtonStyle}" Content="MC" Command="{Binding MemoryClearCommand}"/>
+            <Button Grid.Row="1" Grid.Column="1" Style="{StaticResource MemoryButtonStyle}" Content="MR" Command="{Binding MemoryRecallCommand}"/>
+            <Button Grid.Row="1" Grid.Column="2" Style="{StaticResource MemoryButtonStyle}" Content="MS" Command="{Binding MemoryStoreCommand}"/>
+            <Button Grid.Row="1" Grid.Column="3" Style="{StaticResource MemoryButtonStyle}" Content="M+" Command="{Binding MemoryAddCommand}"/>
+            <Button Grid.Row="1" Grid.Column="4" Style="{StaticResource MemoryButtonStyle}" Content="M-" Command="{Binding MemorySubtractCommand}"/>
+            <!-- 第三排：三角函數按鈕 -->
+            <Button Grid.Row="2" Grid.Column="0" x:Name="TrigButton" Style="{StaticResource MemoryButtonStyle}">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <TextBlock Text="{Binding TrigButtonText}" VerticalAlignment="Center"/>
+                        <FontIcon Glyph="&#xE70D;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center" FontSize="12"/>
+                    </StackPanel>
+                </Button.Content>
+                <Button.Flyout>
+                    <Flyout Placement="Bottom">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <!-- 第一排 -->
+                            <Button Content="sin" Style="{StaticResource OperatorButtonStyle}" Grid.Row="0" Grid.Column="0" Command="{Binding FunctionCommand}" CommandParameter="sin"/>
+                            <Button Content="cos" Style="{StaticResource OperatorButtonStyle}" Grid.Row="0" Grid.Column="1" Command="{Binding FunctionCommand}" CommandParameter="cos"/>
+                            <Button Content="tan" Style="{StaticResource OperatorButtonStyle}" Grid.Row="0" Grid.Column="2" Command="{Binding FunctionCommand}" CommandParameter="tan"/>
+                            <!-- 第二排 -->
+                            <Button Content="sec" Style="{StaticResource OperatorButtonStyle}" Grid.Row="1" Grid.Column="0" Command="{Binding FunctionCommand}" CommandParameter="sec"/>
+                            <Button Content="csc" Style="{StaticResource OperatorButtonStyle}" Grid.Row="1" Grid.Column="1" Command="{Binding FunctionCommand}" CommandParameter="csc"/>
+                            <Button Content="cot" Style="{StaticResource OperatorButtonStyle}" Grid.Row="1" Grid.Column="2" Command="{Binding FunctionCommand}" CommandParameter="cot"/>
+                        </Grid>
+                    </Flyout>
+                </Button.Flyout>
+            </Button>
+        </Grid>
+
+        <!-- 按鈕區 -->
+        <Grid Grid.Row="3" Margin="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <!-- 第一排：功能 -->
+            <Button x:Name="SecondFunctionButton" Style="{StaticResource OperatorButtonStyle}" Content="2nd" Grid.Row="0" Grid.Column="0" Command="{Binding SecondFunctionCommand}"/>
+            <Button Style="{StaticResource OperatorButtonStyle}" Content="π" Grid.Row="0" Grid.Column="1" Command="{Binding FunctionCommand}" CommandParameter="pi"/>
+            <Button Style="{StaticResource OperatorButtonStyle}" Content="e" Grid.Row="0" Grid.Column="2" Command="{Binding FunctionCommand}" CommandParameter="euler"/>
+            <Button Style="{StaticResource OperatorButtonStyle}" Content="C" Grid.Row="0" Grid.Column="3" Command="{Binding ClearCommand}" CommandParameter="clear"/>
+            <Button Style="{StaticResource OperatorButtonStyle}" Content="⌫" Grid.Row="0" Grid.Column="4" Command="{Binding ClearCommand}" CommandParameter="backspace"/>
+            <!-- 第二排 -->
+            <Button Style="{StaticResource OperatorButtonStyle}" Content="{Binding SquareButtonText}" Grid.Row="1" Grid.Column="0" Command="{Binding FunctionCommand}" CommandParameter="{Binding SquareButtonParameter}"/>
+            <Button Style="{StaticResource OperatorButtonStyle}" Content="¹/𝑥" Grid.Row="1" Grid.Column="1" Command="{Binding FunctionCommand}" CommandParameter="reciprocal"/>
+            <Button Style="{StaticResource OperatorButtonStyle}" Content="|x|" Grid.Row="1" Grid.Column="2" Command="{Binding FunctionCommand}" CommandParameter="abs"/>
+            <Button Style="{StaticResource OperatorButtonStyle}" Content="exp" Grid.Row="1" Grid.Column="3" Command="{Binding FunctionCommand}" CommandParameter="exp"/>
+            <Button Style="{StaticResource OperatorButtonStyle}" Content="mod" Grid.Row="1" Grid.Column="4" Command="{Binding OperatorCommand}" CommandParameter="mod"/>
+            <!-- 第三排 -->
+            <Button Style="{StaticResource OperatorButtonStyle}" Content="{Binding SqrtButtonText}" Grid.Row="2" Grid.Column="0" Command="{Binding FunctionCommand}" CommandParameter="{Binding SqrtButtonParameter}"/>
+            <Button Style="{StaticResource OperatorButtonStyle}" Content="(" Grid.Row="2" Grid.Column="1" Command="{Binding OperatorCommand}" CommandParameter="leftparen"/>
+            <Button Style="{StaticResource OperatorButtonStyle}" Content=")" Grid.Row="2" Grid.Column="2" Command="{Binding OperatorCommand}" CommandParameter="rightparen"/>
+            <Button Style="{StaticResource OperatorButtonStyle}" Content="n!" Grid.Row="2" Grid.Column="3" Command="{Binding FunctionCommand}" CommandParameter="factorial"/>
+            <Button Style="{StaticResource OperatorButtonStyle}" Content="÷" Grid.Row="2" Grid.Column="4" Command="{Binding OperatorCommand}" CommandParameter="divide"/>
+            <!-- 第四排 -->
+            <Button Style="{StaticResource OperatorButtonStyle}" Content="{Binding PowerButtonText}" Grid.Row="3" Grid.Column="0" Command="{Binding FunctionCommand}" CommandParameter="{Binding PowerButtonParameter}"/>
+            <Button Style="{StaticResource CalculatorButtonStyle}" Content="7" Grid.Row="3" Grid.Column="1" Command="{Binding NumberCommand}" CommandParameter="seven"/>
+            <Button Style="{StaticResource CalculatorButtonStyle}" Content="8" Grid.Row="3" Grid.Column="2" Command="{Binding NumberCommand}" CommandParameter="eight"/>
+            <Button Style="{StaticResource CalculatorButtonStyle}" Content="9" Grid.Row="3" Grid.Column="3" Command="{Binding NumberCommand}" CommandParameter="nine"/>
+            <Button Style="{StaticResource OperatorButtonStyle}" Content="×" Grid.Row="3" Grid.Column="4" Command="{Binding OperatorCommand}" CommandParameter="multiply"/>
+            <!-- 第五排 -->
+            <Button Style="{StaticResource OperatorButtonStyle}" Content="{Binding TenPowerButtonText}" Grid.Row="4" Grid.Column="0" Command="{Binding FunctionCommand}" CommandParameter="{Binding TenPowerButtonParameter}"/>
+            <Button Style="{StaticResource CalculatorButtonStyle}" Content="4" Grid.Row="4" Grid.Column="1" Command="{Binding NumberCommand}" CommandParameter="four"/>
+            <Button Style="{StaticResource CalculatorButtonStyle}" Content="5" Grid.Row="4" Grid.Column="2" Command="{Binding NumberCommand}" CommandParameter="five"/>
+            <Button Style="{StaticResource CalculatorButtonStyle}" Content="6" Grid.Row="4" Grid.Column="3" Command="{Binding NumberCommand}" CommandParameter="six"/>
+            <Button Style="{StaticResource OperatorButtonStyle}" Content="−" Grid.Row="4" Grid.Column="4" Command="{Binding OperatorCommand}" CommandParameter="subtract"/>
+            <!-- 第六排 -->
+            <Button Style="{StaticResource OperatorButtonStyle}" Content="{Binding LogButtonText}" Grid.Row="5" Grid.Column="0" Command="{Binding FunctionCommand}" CommandParameter="{Binding LogButtonParameter}"/>
+            <Button Style="{StaticResource CalculatorButtonStyle}" Content="1" Grid.Row="5" Grid.Column="1" Command="{Binding NumberCommand}" CommandParameter="one"/>
+            <Button Style="{StaticResource CalculatorButtonStyle}" Content="2" Grid.Row="5" Grid.Column="2" Command="{Binding NumberCommand}" CommandParameter="two"/>
+            <Button Style="{StaticResource CalculatorButtonStyle}" Content="3" Grid.Row="5" Grid.Column="3" Command="{Binding NumberCommand}" CommandParameter="three"/>
+            <Button Style="{StaticResource OperatorButtonStyle}" Content="+" Grid.Row="5" Grid.Column="4" Command="{Binding OperatorCommand}" CommandParameter="add"/>
+            <!-- 第七排 -->
+            <Button Style="{StaticResource OperatorButtonStyle}" Content="{Binding LnButtonText}" Grid.Row="6" Grid.Column="0" Command="{Binding FunctionCommand}" CommandParameter="{Binding LnButtonParameter}"/>
+            <Button Style="{StaticResource CalculatorButtonStyle}" Content="⁺/₋" Grid.Row="6" Grid.Column="1" Command="{Binding OperatorCommand}" CommandParameter="negate"/>
+            <Button Style="{StaticResource CalculatorButtonStyle}" Content="0" Grid.Row="6" Grid.Column="2" Command="{Binding NumberCommand}" CommandParameter="zero"/>
+            <Button Style="{StaticResource CalculatorButtonStyle}" Content="." Grid.Row="6" Grid.Column="3" Command="{Binding NumberCommand}" CommandParameter="decimal"/>
+            <Button Style="{StaticResource EqualsButtonStyle}" Content="=" Grid.Row="6" Grid.Column="4" Command="{Binding EqualsCommand}" CommandParameter="equals"/>
+        </Grid>
+
+        <!-- 歷史記錄面板 -->
+        <Border x:Name="HistoryPanel"
+                Grid.RowSpan="5"
+                Background="{ThemeResource SolidBackgroundFillColorBase}"
+                Visibility="{Binding IsHistoryPanelVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                HorizontalAlignment="Right"
+                Width="380"
+                CornerRadius="8"
+                Canvas.ZIndex="1000"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1">
+            <Border.Shadow>
+                <ThemeShadow />
+            </Border.Shadow>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- 歷史記錄標題 -->
+                <Grid Grid.Row="0" Padding="16" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" CornerRadius="8,8,0,0">
+                    <TextBlock x:Name="HistoryTitleText" FontSize="20" FontWeight="SemiBold"/>
+                    <Button x:Name="CloseHistoryButton"
+                            Content="&#xE711;"
+                            FontFamily="Segoe MDL2 Assets"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            HorizontalAlignment="Right"
+                            Command="{Binding CloseHistoryCommand}"/>
+                </Grid>
+
+                <!-- 歷史記錄列表 -->
+                <ListView x:Name="HistoryListView"
+                          Grid.Row="1"
+                          ItemsSource="{Binding HistoryRecords}"
+                          SelectionMode="Single"
+                          SelectedItem="{Binding SelectedHistoryItem, Mode=TwoWay}"
+                          IsItemClickEnabled="False">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="models:HistoryRecord">
+                            <Grid Padding="16,12">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="{x:Bind Expression}"
+                                           Grid.Row="0"
+                                           FontSize="14"
+                                           Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                                <TextBlock Text="{x:Bind Result}"
+                                           Grid.Row="1"
+                                           FontSize="20"
+                                           FontWeight="SemiBold"
+                                           Margin="0,4,0,0"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <!-- 清除歷史記錄按鈕 -->
+                <Button x:Name="ClearHistoryButtonElement"
+                        Grid.Row="2"
+                        Content="清除歷史記錄"
+                        HorizontalAlignment="Stretch"
+                        Margin="16"
+                        Command="{Binding ClearHistoryCommand}"/>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

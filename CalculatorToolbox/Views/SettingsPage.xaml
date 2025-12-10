@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="CalculatorToolbox.Views.SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:CalculatorToolbox.Views"
+    xmlns:vm="using:CalculatorToolbox.ViewModels"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Page.Resources>
+        <vm:SettingsViewModel x:Key="ViewModel"/>
+    </Page.Resources>
+
+    <ScrollViewer>
+        <StackPanel Padding="24,0,24,24" Spacing="24" HorizontalAlignment="Left">
+            <!-- 標題 -->
+            <TextBlock x:Name="SettingsTitle"
+                      FontSize="20"
+                      HorizontalAlignment="Left"
+                      Margin="71,9,0,0"/>
+
+            <!-- 主題設定 -->
+            <StackPanel Spacing="8">
+                <TextBlock x:Name="ThemeLabel"
+                          Style="{StaticResource SubtitleTextBlockStyle}"/>
+                <TextBlock x:Name="ThemeDescription"
+                          Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                          Margin="0,0,0,8"/>
+
+                <RadioButtons x:Name="ThemeRadioButtons"
+                             ItemsSource="{Binding ThemeOptions, Source={StaticResource ViewModel}}"
+                             SelectedIndex="0">
+                    <RadioButtons.ItemTemplate>
+                        <DataTemplate x:DataType="vm:ThemeOption">
+                            <RadioButton Content="{x:Bind Name}" 
+                                       Tag="{x:Bind Theme}"
+                                       GroupName="ThemeGroup"/>
+                        </DataTemplate>
+                    </RadioButtons.ItemTemplate>
+                </RadioButtons>
+            </StackPanel>
+
+            <Border Height="1" 
+                   Background="{ThemeResource DividerStrokeColorDefaultBrush}"/>
+
+            <!-- 語言設定 -->
+            <StackPanel Spacing="8">
+                <TextBlock x:Name="LanguageLabel"
+                          Style="{StaticResource SubtitleTextBlockStyle}"/>
+                <TextBlock x:Name="LanguageDescription"
+                          Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                          Margin="0,0,0,8"/>
+
+                <ComboBox x:Name="LanguageComboBox"
+                         ItemsSource="{Binding LanguageOptions, Source={StaticResource ViewModel}}"
+                         DisplayMemberPath="Name"
+                         SelectedValuePath="Code"
+                         MinWidth="200"
+                         HorizontalAlignment="Left"/>
+            </StackPanel>
+
+            <Border Height="1" 
+                   Background="{ThemeResource DividerStrokeColorDefaultBrush}"/>
+
+            <!-- 關於 -->
+            <StackPanel Spacing="8">
+                <TextBlock x:Name="AboutLabel"
+                          Style="{StaticResource SubtitleTextBlockStyle}"/>
+                <TextBlock x:Name="AppNameText"
+                          Style="{StaticResource BodyStrongTextBlockStyle}"/>
+                <TextBlock x:Name="VersionText"
+                          Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                <TextBlock x:Name="AppDescriptionText"
+                          Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                          TextWrapping="Wrap"
+                          Margin="0,8,0,0"/>
+            </StackPanel>
+
+            <!-- 重啟提示 -->
+            <InfoBar x:Name="RestartInfoBar"
+                    Title="{Binding RestartTitle}"
+                    Message="{Binding RestartMessage}"
+                    Severity="Informational"
+                    IsOpen="False"
+                    IsClosable="True"/>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

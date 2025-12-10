@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <UserControl
-    x:Class="CalculatorToolbox.StandardCalculator"
+    x:Class="CalculatorToolbox.ProgrammerCalculator"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:CalculatorToolbox"
@@ -9,6 +9,8 @@
     mc:Ignorable="d">
 
     <Grid>
-
+        <!-- 程式設計人員計算器標題 -->
+        <TextBlock x:Name="ProgrammerTitle" FontSize="20" HorizontalAlignment="Left" Margin="95,9,0,0" Grid.Row="0"/>
+        <!-- 可擴充：基數轉換、位元操作、字節大小切換等按鈕區 -->
     </Grid>
 </UserControl>

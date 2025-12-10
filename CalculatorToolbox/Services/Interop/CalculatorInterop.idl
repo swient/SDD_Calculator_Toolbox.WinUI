@@ -1,0 +1,55 @@
+namespace CalculatorToolbox.Services.Interop
+{
+    /// <summary>
+    /// 計算器互通元件
+    /// 提供 C# 可呼叫的原生計算功能
+    /// </summary>
+    [default_interface]
+    runtimeclass CalculatorInterop
+    {
+        CalculatorInterop();
+
+        // 基本運算
+        static Double Add(Double a, Double b);
+        static Double Subtract(Double a, Double b);
+        static Double Multiply(Double a, Double b);
+        static Double Divide(Double a, Double b);
+
+        // 進階運算
+        static Double Modulo(Double a, Double b);
+        static Double Power(Double base, Double exponent);
+        static Double SquareRoot(Double value);
+        static Double Square(Double value);
+        static Double Reciprocal(Double value);
+        static Double Negate(Double value);
+
+        // 科學計算功能
+        static Double Sin(Double angle, Boolean isRadians);
+        static Double Cos(Double angle, Boolean isRadians);
+        static Double Tan(Double angle, Boolean isRadians);
+        static Double Asin(Double value);
+        static Double Acos(Double value);
+        static Double Atan(Double value);
+        static Double Log10(Double value);
+        static Double Ln(Double value);
+        static Double Exp(Double value);
+        static Double Factorial(Int32 n);
+
+        // 程式設計人員計算器功能
+        static Int64 BitwiseAnd(Int64 a, Int64 b);
+        static Int64 BitwiseOr(Int64 a, Int64 b);
+        static Int64 BitwiseXor(Int64 a, Int64 b);
+        static Int64 BitwiseNot(Int64 value);
+        static Int64 LeftShift(Int64 value, Int32 shift);
+        static Int64 RightShift(Int64 value, Int32 shift);
+        static Int64 RotateLeft(Int64 value, Int32 rotation, Int32 bitSize);
+        static Int64 RotateRight(Int64 value, Int32 rotation, Int32 bitSize);
+
+        // 基數轉換
+        static Int64 ConvertFromBase(String value, Int32 fromBase);
+        static String ConvertToBase(Int64 value, Int32 toBase);
+
+        // 位元遮罩操作
+        static Int64 ApplyByteMask(Int64 value, Int32 byteSize);
+    }
+}
